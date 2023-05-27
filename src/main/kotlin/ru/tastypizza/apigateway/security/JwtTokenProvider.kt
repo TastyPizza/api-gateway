@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory
 import java.security.PrivateKey
 import java.security.PublicKey
 
+
 class JwtTokenProvider (
-    private val privateKey: PrivateKey,
     val publicKey: PublicKey
 ) {
 
@@ -15,6 +15,7 @@ class JwtTokenProvider (
 
     fun validateToken(token: String): Boolean {
         try {
+            println(publicKey)
             Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token)
             return true
         } catch (ex: SignatureException) {
@@ -31,16 +32,6 @@ class JwtTokenProvider (
         return false
     }
     
-    fun validateTokenType(token: String, type: String): Boolean {
-        if (!validateToken(token)) return false
-
-        return Jwts
-            .parser()
-            .setSigningKey(publicKey)
-            .parseClaimsJwt(token)
-            .body["tokenType"]?.equals(type) ?: false
-    }
-
     fun getUserLoginFromToken(token: String): String {
         
         return Jwts
