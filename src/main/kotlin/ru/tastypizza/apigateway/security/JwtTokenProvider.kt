@@ -1,21 +1,25 @@
 package ru.tastypizza.apigateway.security
 
 import io.jsonwebtoken.*
+import org.bouncycastle.util.Objects
 import org.slf4j.LoggerFactory
-import java.security.PrivateKey
+import org.springframework.beans.factory.annotation.Autowired
+import ru.tastypizza.apigateway.service.PublicKeyService
 import java.security.PublicKey
 
 
-class JwtTokenProvider (
-    val publicKey: PublicKey
-) {
+class JwtTokenProvider {
 
     private val log = LoggerFactory.getLogger(this.javaClass)
 
+    @Autowired
+    lateinit var publicKeyService: PublicKeyService
 
     fun validateToken(token: String): Boolean {
         try {
-            println(publicKey)
+            val publicKey: PublicKey? = publicKeyService.getPublicKey("public_key")
+            if (Objects.areEqual(publicKey, null))
+                log.error("Cannot validate token, because not received public key!")
             Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token)
             return true
         } catch (ex: SignatureException) {
@@ -33,7 +37,10 @@ class JwtTokenProvider (
     }
     
     fun getUserLoginFromToken(token: String): String {
-        
+        val publicKey: PublicKey? = publicKeyService.getPublicKey("public_key")
+        if (Objects.areEqual(publicKey, null))
+            log.error("Cannot validate token, because not received public key!")
+
         return Jwts
             .parser()
             .setSigningKey(publicKey)
@@ -42,7 +49,9 @@ class JwtTokenProvider (
     }
 
     fun getTokenType(token: String): String {
-        
+        val publicKey: PublicKey? = publicKeyService.getPublicKey("public_key")
+        if (Objects.areEqual(publicKey, null))
+            log.error("Cannot validate token, because not received public key!")
         return Jwts
             .parser()
             .setSigningKey(publicKey)
@@ -51,7 +60,9 @@ class JwtTokenProvider (
     }
 
     fun getRole(token: String): String {
-
+        val publicKey: PublicKey? = publicKeyService.getPublicKey("public_key")
+        if (Objects.areEqual(publicKey, null))
+            log.error("Cannot validate token, because not received public key!")
         return Jwts
             .parser()
             .setSigningKey(publicKey)

@@ -32,19 +32,9 @@ class SecurityConfig {
 
     @Bean
     fun jwtTokenProvider(): JwtTokenProvider {
-        val keyGenerator = KeyPairGenerator.getInstance("RSA")
-        keyGenerator.initialize(1024)
-
-        val kp = keyGenerator.genKeyPair()
-        val publicKeyString = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCysFdX5wWolRwKQXzyjusYPSdHEPiONlIu9+YufkuQE06IfeO43e7wWg6/saPzafa5P/pHoquteGRB3OzpQA4furFkjBU2mfucqmtoD0CBiWcZcBI4+sAwvnbJr8SgCAh/y1Ek9KKLxQ6+sc94BClhkhREtp7T8KZo+avNDHXYnQIDAQAB"
-        val publicKeyBytes = Base64.getDecoder().decode(publicKeyString)
-        val keyFactory = KeyFactory.getInstance("RSA")
-        val publicKeySpec = X509EncodedKeySpec(publicKeyBytes)
-        val publicKey: PublicKey = keyFactory.generatePublic(publicKeySpec)
-
-        return JwtTokenProvider(publicKey)
+        return JwtTokenProvider()
     }
-//
+
     @Bean
     fun authManager(jwtTokenProvider: JwtTokenProvider): ReactiveAuthenticationManager {
         return AuthenticationManager(jwtTokenProvider)

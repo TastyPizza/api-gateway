@@ -13,7 +13,6 @@ class AuthenticationManager(
 
     override fun authenticate(authentication: Authentication): Mono<Authentication> {
         val jwt: String = authentication.credentials.toString()
-        println(jwt)
         if (StringUtils.hasText(jwt) &&
             jwtTokenProvider.validateToken(jwt) &&
             jwtTokenProvider.getTokenType(jwt) != "refresh"
@@ -26,7 +25,6 @@ class AuthenticationManager(
                 "",
                 setOf(SimpleGrantedAuthority(role))
             )
-            println(authenticationToken)
             return Mono.just(authenticationToken)
         } else {
             return Mono.empty()
