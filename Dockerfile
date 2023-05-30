@@ -1,6 +1,6 @@
 FROM openjdk:19-slim
 
-ARG JAR_FILE=target/*.jar
+ARG JAR_FILE=build/libs/*SNAPSHOT.jar
 
 COPY $JAR_FILE /api-gateway.jar
 
