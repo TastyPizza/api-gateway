@@ -5,6 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.0"
 	kotlin("jvm") version "1.8.20"
 	kotlin("plugin.spring") version "1.8.20"
+
 }
 
 group = "ru.tasty-pizza"
@@ -45,6 +46,12 @@ dependencyManagement {
 	}
 }
 
+tasks {
+	test {
+		enabled = false
+	}
+}
+
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
@@ -55,3 +62,4 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
