@@ -23,7 +23,7 @@ class CustomerConfig {
                     .uri("lb://profile")
             }
             .route("menu-service") {
-                it.path("/menu/**", "/orders/**", "/restaurant/**")
+                it.path("/menu/**", "/restaurant/**", "/orders/**")
                     .uri("lb://menu-orders")
             }
             .build()

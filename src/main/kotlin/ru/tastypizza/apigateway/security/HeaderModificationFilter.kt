@@ -13,18 +13,13 @@ class HeaderModificationFilter : WebFilter {
         val authenticationMono = exchange.getPrincipal<Authentication>()
 
         return authenticationMono.flatMap { authentication ->
-            // Access the authentication and modify the headers
-            val modifiedHeaders = HttpHeaders()
-            modifiedHeaders.addAll(exchange.request.headers)
-            modifiedHeaders.add("User-Id", authentication.principal.toString())
-            modifiedHeaders.add("Role", authentication.authorities.joinToString(","))
-
+//             Access the authentication and modify the headers
             val modifiedRequest = exchange.request.mutate()
                 .headers { headers ->
-                    headers.addAll(modifiedHeaders)
+                    headers.set("User-Id", authentication.principal.toString())
+                    headers.set("Role", authentication.authorities.joinToString(","))
                 }
                 .build()
-
             chain.filter(exchange.mutate().request(modifiedRequest).build())
         }.switchIfEmpty(chain.filter(exchange))
     }
